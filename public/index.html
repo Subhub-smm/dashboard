@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SubHub SMM Panel</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9fbff;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #4a59c0;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      background-color: #eef0ff;
+      padding: 10px;
+    }
+
+    nav button {
+      padding: 10px 20px;
+      background-color: #5a6acf;
+      border: none;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    nav button:hover {
+      background-color: #4a59c0;
+    }
+
+    .tab {
+      display: none;
+      padding: 20px;
+      max-width: 500px;
+      margin: 20px auto;
+      background: white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 10px;
+    }
+
+    .tab.active {
+      display: block;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #4a59c0;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #3e4bb5;
+    }
+  </style>
+</head>
+<body>
+
+<header>🚀 SubHub SMM Panel</header>
+
+<nav>
+  <button onclick="switchTab('loginTab')">Login</button>
+  <button onclick="switchTab('registerTab')">Register</button>
+  <button onclick="switchTab('orderTab')">Place Order</button>
+  <button onclick="switchTab('topupTab')">Admin Top-up</button>
+</nav>
+
+<div id="loginTab" class="tab active">
+  <h3>🔐 Login</h3>
+  <input type="text" id="loginUser" placeholder="Username">
+  <input type="password" id="loginPass" placeholder="Password">
+  <button onclick="loginUser()">Login</button>
+</div>
+
+<div id="registerTab" class="tab">
+  <h3>📝 Register</h3>
+  <input type="text" id="regUser" placeholder="Username">
+  <input type="password" id="regPass" placeholder="Password">
+  <button onclick="registerUser()">Register</button>
+</div>
+
+<div id="orderTab" class="tab">
+  <h3>📦 Place an Order</h3>
+  <input type="text" id="service" placeholder="Service (e.g. YouTube Subscribers)">
+  <input type="text" id="link" placeholder="Link">
+  <input type="number" id="quantity" placeholder="Quantity">
+  <button onclick="placeOrder()">Submit Order</button>
+</div>
+
+<div id="topupTab" class="tab">
+  <h3>💼 Admin Top-up</h3>
+  <input type="text" id="topupUsername" placeholder="Username">
+  <input type="number" id="topupAmount" placeholder="Amount">
+  <input type="password" id="topupKey" placeholder="Admin Key">
+  <button onclick="adminTopup()">Top-up</button>
+</div>
+
+<script>
+  let authToken = '';
+
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+  }
+
+  function registerUser() {
+    const username = document.getElementById('regUser').value;
+    const password = document.getElementById('regPass').value;
+
+    fetch('/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    }).then(res => res.json()).then(data => alert(data.message));
+  }
+
+  function loginUser() {
+    const username = document.getElementById('loginUser').value;
+    const password = document.getElementById('loginPass').value;
+
+    fetch('/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    }).then(res => res.json()).then(data => {
+      if (data.token) {
+        authToken = data.token;
+        alert("Login successful!");
+        switchTab('orderTab');
+      } else {
+        alert(data.message);
+      }
+    });
+  }
+
+  function placeOrder() {
+    const service = document.getElementById('service').value;
+    const link = document.getElementById('link').value;
+    const quantity = document.getElementById('quantity').value;
+
+    fetch('/order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: authToken, service, link, quantity })
+    }).then(res => res.json()).then(data => alert(data.message));
+  }
+
+  function adminTopup() {
+    const username = document.getElementById('topupUsername').value;
+    const amount = document.getElementById('topupAmount').value;
+    const adminKey = document.getElementById('topupKey').value;
+
+    fetch('/admin/topup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, amount, adminKey })
+    }).then(res => res.json()).then(data => alert(data.message));
+  }
+</script>
+
+</body>
+</html>

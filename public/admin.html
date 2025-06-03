@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard - SMM Panel</title>
+  <link rel="stylesheet" href="admin.css"/>
+</head>
+<body>
+  <div class="container">
+    <h1>📊 Admin Dashboard</h1>
+
+    <div class="stats">
+      <div>Total Users: <span id="totalUsers">0</span></div>
+      <div>Total Orders: <span id="totalOrders">0</span></div>
+      <div>Active Orders: <span id="activeOrders">0</span></div>
+    </div>
+
+    <h2>👥 Users</h2>
+    <table id="userTable">
+      <thead>
+        <tr><th>Username</th><th>Balance</th><th>Status</th><th>Actions</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <h2>🧾 Orders</h2>
+    <table id="orderTable">
+      <thead>
+        <tr><th>Service</th><th>Link</th><th>Quantity</th><th>Status</th><th>Actions</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>
