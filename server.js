@@ -66,12 +66,13 @@ app.post('/order', (req, res) => {
       const balance = results[0].balance;
       if (balance < totalCost) return res.status(400).json({ message: 'Insufficient balance' });
 
-      db.query('INSERT INTO orders (user_id, service, link, quantity, status) VALUES (?, ?, ?, ?, ?)', [userId, service, link, quantity, 'Pending'], (err) => {
-        if (err) return res.status(500).json({ message: 'Order failed' });
+      db.query('INSERT INTO orders (user_id, service, link, quantity, status) VALUES (?, ?, ?, ?, ?)',
+        [userId, service, link, quantity, 'Pending'], (err) => {
+          if (err) return res.status(500).json({ message: 'Order failed' });
 
-        db.query('UPDATE users SET balance = balance - ? WHERE id = ?', [totalCost, userId]);
-        res.status(200).json({ message: 'Order placed successfully' });
-      });
+          db.query('UPDATE users SET balance = balance - ? WHERE id = ?', [totalCost, userId]);
+          res.status(200).json({ message: 'Order placed successfully' });
+        });
     });
   } catch (e) {
     res.status(401).json({ message: 'Unauthorized' });
@@ -136,7 +137,11 @@ app.post('/admin/dashboard', (req, res) => {
     });
   });
 });
+app.get('/', (req, res) => {
+  res.send('✅ SMM Panel Backend is Live and Running!');
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
