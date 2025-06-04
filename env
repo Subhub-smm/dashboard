@@ -1,0 +1,6 @@
+
+DB_HOST=localhost
+DB_USER=root
+DB_PASS=Haffkast@2004
+DB_NAME=smm_panel
+JWT_SECRET=secretKey
